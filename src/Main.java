@@ -14,39 +14,52 @@ public class Main {
         }
         return result;
     }
+    public static int trackBulls(String numString, int guess) {
+
+        List<Integer> bulls = new ArrayList<>();
+        String guessString = Integer.toString(guess);
+        for (int i = 0; i < guessString.length(); i++) {
+            if (numString.charAt(i) == guessString.charAt(i)) {
+                bulls.add(Character.getNumericValue(numString.charAt(i)));
+            }
+        }
+        return bulls.size();
+    }
+    public static int trackCows(String numString, int guess) {
+
+        List<Integer> cows = new ArrayList<>();
+        String guessString = Integer.toString(guess);
+        for (int i = 0; i < guessString.length(); i++) {
+            if (numString.contains(Character.toString(guessString.charAt(i))) &&
+                    numString.charAt(i) !=guessString.charAt(i)) {
+                cows.add(Character.getNumericValue(guessString.charAt(i)));
+            }
+        }
+        return cows.size();
+    }
     public static void getNums(String numString) {
         Scanner scanner = new Scanner(System.in);
         boolean trueorfalse = true;
-
-        while (trueorfalse == true) {
+        while (trueorfalse) {
             boolean Check = true;
-            List<Integer> bulls = new ArrayList<>();
-            List<Integer> cows = new ArrayList<>();
+
             List<String> Digits = new ArrayList<>();
             System.out.println("Enter a number");
             try {
                 int guess = scanner.nextInt();
-
                 String guessString = Integer.toString(guess);
-
                 for (int i = 0; i < guessString.length(); i++) {
                     Digits.add(String.valueOf(guessString.charAt(i)));
                 }
-
-
-                //2673
-                boolean Check2 = true;
-
                 for (int i = 0; i < Digits.size(); i++) {
                     for (int j = i + 1; j < Digits.size(); j++) {
                         if (Digits.get(i).equals(Digits.get(j))) {
                             Check = false;
                         }
                     }
-                }
+                }//
                 boolean trueorfalse2 = true;
                 boolean notEnoughNums = true;
-                boolean stringType = true;
 
                 if (guessString.length() < 4) {
                     notEnoughNums = false;
@@ -55,43 +68,29 @@ public class Main {
                     System.out.println("You won!");
                     System.exit(0);
                 }
-
-                try {
-                    for (int i = 0; i < guessString.length(); i++) {
-                        if (numString.charAt(i) == guessString.charAt(i)) {
-                            bulls.add(Character.getNumericValue(numString.charAt(i)));
-                        } else if (numString.contains(Character.toString(guessString.charAt(i)))) {
-                            cows.add(Character.getNumericValue(guessString.charAt(i)));
-                        }
-                    }
-
-                } catch (IndexOutOfBoundsException e) {
-                    System.out.println(e);
-                    trueorfalse2 = false;
-                }
                 if (Check == false) {
                     System.out.println("You entered the same numbers, please try again!");
                 }
                 if (notEnoughNums == false) {
                     System.out.println("You have entered less than 4 digits, please try again!");
-
                 }
+                try {
+                    trackBulls(numString, guess);
+                    trackCows(numString, guess);
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println(e);
+                    trueorfalse2 = false;
+                }
+
                 if (Check == true && trueorfalse2 == true && notEnoughNums == true) {
-                    System.out.println("You Have " + bulls.size() + " Bulls");
-                    System.out.println("You Have " + cows.size() + " Cows");
+                    System.out.println("You Have " + trackBulls(numString, guess) + " Bulls");
+                    System.out.println("You Have " + trackCows(numString,guess) + " Cows");
                 }
             }catch (InputMismatchException e) {
                 System.out.println("Error: Expected an integer input.");
                 scanner.next();
             }
-
-
-
         }
-    }
-
-    public static void ShowMenu() {
-
     }
     public static void main(String[] args) {
         int num = generateFourDigitNumber();
